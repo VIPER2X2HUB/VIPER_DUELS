@@ -1,0 +1,10 @@
+-- AMY HUB - Viper Duels Loader
+local success, errorMessage = pcall(function()
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/Adhamgames2/VIPER-DUELS/main/VIPER-DUELS"))()
+end)
+
+if not success then
+    warn("[AMY HUB] Error loading script: " .. tostring(errorMessage))
+else
+    print("[AMY HUB] Viper Duels Loaded Successfully!")
+end
