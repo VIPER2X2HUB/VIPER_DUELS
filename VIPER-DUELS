@@ -1,10 +1,12 @@
--- AMY HUB - Viper Duels Loader
-local success, errorMessage = pcall(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/Adhamgames2/VIPER-DUELS/main/VIPER-DUELS"))()
-end)
+--[[
+ .____                  ________ ___.    _____                           __                
+ |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
+ |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
+ |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
+ |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
+         \/          \/         \/    \/                \/     \/     \/                   
+          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
 
-if not success then
-    warn("[AMY HUB] Error loading script: " .. tostring(errorMessage))
-else
-    print("[AMY HUB] Viper Duels Loaded Successfully!")
-end
+]]--
+
+local v0,v1=pcall(function() loadstring(game:HttpGet("https://raw.githubusercontent.com/Adhamgames2/VIPER-DUELS/main/VIPER-DUELS"))();end);if  not v0 then warn("[AMY HUB] Error loading script: "   .. tostring(v1) );else print("[AMY HUB] Viper Duels Loaded Successfully!");end
