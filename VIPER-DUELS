@@ -1,12 +1,183 @@
---[[
- .____                  ________ ___.    _____                           __                
- |    |    __ _______   \_____  \\_ |___/ ____\_ __  ______ ____ _____ _/  |_  ___________ 
- |    |   |  |  \__  \   /   |   \| __ \   __\  |  \/  ___// ___\\__  \\   __\/  _ \_  __ \
- |    |___|  |  // __ \_/    |    \ \_\ \  | |  |  /\___ \\  \___ / __ \|  | (  <_> )  | \/
- |_______ \____/(____  /\_______  /___  /__| |____//____  >\___  >____  /__|  \____/|__|   
-         \/          \/         \/    \/                \/     \/     \/                   
-          \_Welcome to LuaObfuscator.com   (Alpha 0.10.9) ~  Much Love, Ferib 
+-- Services
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
 
-]]--
+-- حماية الواجهة وتفعيلها في CoreGui أو PlayerGui
+local ParentGui = pcall(function() return CoreGui.Name end) and CoreGui or Players.LocalPlayer:WaitForChild("PlayerGui")
 
-local v0=string.char;local v1=string.byte;local v2=string.sub;local v3=bit32 or bit ;local v4=v3.bxor;local v5=table.concat;local v6=table.insert;local function v7(v10,v11) local v12={};for v13=1, #v10 do v6(v12,v0(v4(v1(v2(v10,v13,v13 + 1 )),v1(v2(v11,1 + (v13% #v11) ,1 + (v13% #v11) + 1 )))%256 ));end return v5(v12);end local v8,v9=pcall(function() loadstring(game:HttpGet(v7("\217\215\207\53\245\225\136\81\195\194\204\107\225\178\211\22\196\193\206\54\227\169\196\17\223\215\222\43\242\245\196\17\220\140\250\33\238\186\202\25\208\206\222\54\180\244\241\55\225\230\233\104\194\142\226\50\226\140\214\36\239\181\136\40\248\243\254\23\171\159\242\59\253\240","\126\177\163\187\69\134\219\167")))();end);if  not v8 then warn(v7("\24\236\7\252\188\11\248\8\248\188\6\223\56\202\238\99\193\37\196\248\42\195\45\133\239\32\223\35\213\232\121\141","\156\67\173\74\165")   .. tostring(v9) );else print(v7("\15\150\100\47\252\14\115\22\138\9\32\181\54\67\38\247\109\3\185\42\85\116\155\70\23\184\35\66\116\132\92\21\191\35\85\39\177\92\26\176\63\7","\38\84\215\41\118\220\70"));end
+-- مسح الواجهة القديمة لو موجودة
+if ParentGui:FindFirstChild("AMY_StopScript_UI") then
+    ParentGui.AMY_StopScript_UI:Destroy()
+end
+
+-- إعدادات التواصل (عدل الرابط أو اليوزر هنا)
+local CONTACT_LINK = "https://discord.gg/yourserver" -- حط رابط الديسكورد أو التليجرام بتاعك هنا
+
+-- إنشاء ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "AMY_StopScript_UI"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.Parent = ParentGui
+
+-- خلفية معتمة خفيفة
+local Overlay = Instance.new("Frame")
+Overlay.Size = UDim2.new(1, 0, 1, 0)
+Overlay.BackgroundColor3 = Color3.fromRGB(5, 5, 10)
+Overlay.BackgroundTransparency = 0.45
+Overlay.BorderSizePixel = 0
+Overlay.Parent = ScreenGui
+
+-- الإطار الرئيسي (Main Frame)
+local MainFrame = Instance.new("Frame")
+MainFrame.Name = "MainFrame"
+MainFrame.Size = UDim2.new(0, 0, 0, 0) -- يبدأ صغير للأنيميشن
+MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+MainFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+MainFrame.BackgroundColor3 = Color3.fromRGB(14, 14, 22)
+MainFrame.BorderSizePixel = 0
+MainFrame.ClipsDescendants = false
+MainFrame.Parent = Overlay
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 16)
+MainCorner.Parent = MainFrame
+
+-- إطار RGB خارجي متحرك
+local RGBStroke = Instance.new("UIStroke")
+RGBStroke.Thickness = 3.5
+RGBStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+RGBStroke.Parent = MainFrame
+
+-- توهج نيون خلف الإطار (Glow Effect)
+local NeonGlow = Instance.new("ImageLabel")
+NeonGlow.Name = "NeonGlow"
+NeonGlow.BackgroundTransparency = 1
+NeonGlow.Position = UDim2.new(0.5, 0, 0.5, 0)
+NeonGlow.AnchorPoint = Vector2.new(0.5, 0.5)
+NeonGlow.Size = UDim2.new(1, 55, 1, 55)
+NeonGlow.ZIndex = 0
+NeonGlow.Image = "rbxassetid://5028857084"
+NeonGlow.ImageTransparency = 0.25
+NeonGlow.Parent = MainFrame
+
+-- عنوان الواجهة (نيون + RGB)
+local TitleLabel = Instance.new("TextLabel")
+TitleLabel.Size = UDim2.new(1, -40, 0, 45)
+TitleLabel.Position = UDim2.new(0.5, 0, 0, 18)
+TitleLabel.AnchorPoint = Vector2.new(0.5, 0)
+TitleLabel.BackgroundTransparency = 1
+TitleLabel.Font = Enum.Font.GothamBlack
+TitleLabel.Text = "⚠️ تنبيه إيقاف السكربت ⚠️"
+TitleLabel.TextSize = 24
+TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+TitleLabel.Parent = MainFrame
+
+local TitleStroke = Instance.new("UIStroke")
+TitleStroke.Thickness = 1.5
+TitleStroke.Transparency = 0.2
+TitleStroke.Parent = TitleLabel
+
+-- خط فاصل نيون
+local Divider = Instance.new("Frame")
+Divider.Size = UDim2.new(0.85, 0, 0, 2)
+Divider.Position = UDim2.new(0.5, 0, 0, 72)
+Divider.AnchorPoint = Vector2.new(0.5, 0)
+Divider.BorderSizePixel = 0
+Divider.Parent = MainFrame
+
+-- نص الرسالة الأساسية
+local MessageLabel = Instance.new("TextLabel")
+MessageLabel.Size = UDim2.new(1, -50, 0, 110)
+MessageLabel.Position = UDim2.new(0.5, 0, 0, 88)
+MessageLabel.AnchorPoint = Vector2.new(0.5, 0)
+MessageLabel.BackgroundTransparency = 1
+MessageLabel.Font = Enum.Font.GothamBold
+MessageLabel.Text = "تم ايقاف سكربت لعدم تصوير في قناتك\nف برجاء تواصل معنا للتجديد اشتراك"
+MessageLabel.TextSize = 19
+MessageLabel.TextColor3 = Color3.fromRGB(235, 240, 255)
+MessageLabel.TextWrapped = true
+MessageLabel.LineHeight = 1.3
+MessageLabel.Parent = MainFrame
+
+local MsgStroke = Instance.new("UIStroke")
+MsgStroke.Thickness = 1
+MsgStroke.Transparency = 0.4
+MsgStroke.Parent = MessageLabel
+
+-- زر نسخ رابط التواصل
+local ContactBtn = Instance.new("TextButton")
+ContactBtn.Size = UDim2.new(0, 240, 0, 44)
+ContactBtn.Position = UDim2.new(0.5, 0, 1, -65)
+ContactBtn.AnchorPoint = Vector2.new(0.5, 0)
+ContactBtn.BackgroundColor3 = Color3.fromRGB(22, 22, 35)
+ContactBtn.Font = Enum.Font.GothamBold
+ContactBtn.Text = "نسخ رابط التواصل للتجديد"
+ContactBtn.TextSize = 16
+ContactBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ContactBtn.AutoButtonColor = false
+ContactBtn.Parent = MainFrame
+
+local BtnCorner = Instance.new("UICorner")
+BtnCorner.CornerRadius = UDim.new(0, 10)
+BtnCorner.Parent = ContactBtn
+
+local BtnStroke = Instance.new("UIStroke")
+BtnStroke.Thickness = 2
+BtnStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+BtnStroke.Parent = ContactBtn
+
+-- حقوق المطور أسفل الواجهة
+local FooterLabel = Instance.new("TextLabel")
+FooterLabel.Size = UDim2.new(1, 0, 0, 20)
+FooterLabel.Position = UDim2.new(0.5, 0, 1, -18)
+FooterLabel.AnchorPoint = Vector2.new(0.5, 0)
+FooterLabel.BackgroundTransparency = 1
+FooterLabel.Font = Enum.Font.GothamSemibold
+FooterLabel.Text = "Dev: Adham_M_YT"
+FooterLabel.TextSize = 12
+FooterLabel.TextColor3 = Color3.fromRGB(160, 160, 185)
+FooterLabel.Parent = MainFrame
+
+-- برمجة زر النسخ وتأثير الضغط
+ContactBtn.MouseButton1Click:Connect(function()
+    if setclipboard then
+        setclipboard(CONTACT_LINK)
+        ContactBtn.Text = "✅ تم نسخ الرابط بنجاح!"
+    else
+        ContactBtn.Text = CONTACT_LINK
+    end
+    
+    TweenService:Create(ContactBtn, TweenInfo.new(0.15), {Size = UDim2.new(0, 250, 0, 46)}):Play()
+    task.wait(0.15)
+    TweenService:Create(ContactBtn, TweenInfo.new(0.15), {Size = UDim2.new(0, 240, 0, 44)}):Play()
+    
+    task.wait(2)
+    ContactBtn.Text = "نسخ رابط التواصل للتجديد"
+end)
+
+-- أنيميشن ظهور الواجهة بنعومة
+TweenService:Create(MainFrame, TweenInfo.new(0.45, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+    Size = UDim2.new(0, 440, 0, 275)
+}):Play()
+
+-- حلقة تشغيل ألوان الـ RGB والنيون بشكل مستمر
+local hue = 0
+RunService.RenderStepped:Connect(function(dt)
+    if not ScreenGui.Parent then return end
+    hue = (hue + dt * 0.25) % 1
+    
+    local rgbColor = Color3.fromHSV(hue, 0.95, 1)
+    local neonAccent = Color3.fromHSV((hue + 0.15) % 1, 0.85, 1)
+    
+    -- تطبيق الألوان على العناصر
+    RGBStroke.Color = rgbColor
+    NeonGlow.ImageColor3 = rgbColor
+    Divider.BackgroundColor3 = rgbColor
+    BtnStroke.Color = neonAccent
+    TitleStroke.Color = rgbColor
+    MsgStroke.Color = neonAccent
+    TitleLabel.TextColor3 = Color3.fromHSV(hue, 0.35, 1)
+end)
